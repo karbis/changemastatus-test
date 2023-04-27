@@ -106,7 +106,7 @@ def is_emoji(text):
 profanity.load_censor_words_from_file('swearlist.txt')
 
 def check_word(string):
-    string = replace_similiar_chars(string)
+    string = replace_similar_chars(string)
     string = ''.join([' ' if not c.isalpha() else c for c in string])
     words = string.split()
     for word in words:
@@ -118,7 +118,7 @@ def check_word(string):
     return False
 
 def check_word2(string):
-    string = replace_similiar_chars(string)
+    string = replace_similar_chars(string)
     words = string.split()
     for word in words:
         word = ''.join(['' if not c.isalpha() else c for c in word])
