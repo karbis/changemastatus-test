@@ -1,0 +1,4 @@
+fastapi
+requests
+pydantic
+better_profanity
