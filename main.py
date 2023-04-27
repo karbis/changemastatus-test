@@ -52,7 +52,7 @@ rateLimit = False
 def doRateLimit(info):
     global rateLimit
     rateLimit = True
-    time.sleep(time.time()-int(info["X-RateLimit-Reset"]))
+    time.sleep(3)
     rateLimit = False
 
 @app.post("/change/")
@@ -67,8 +67,6 @@ def read_item(data: Item):
     if data.emoji != None:
         dicti = {"custom_status":{"text":data.status,"emoji_name":data.emoji}}
     response = requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": T,"content-type": "application/json"}, data=json.dumps(dicti))
-    print(response.headers)
-    if response.headers != None and response.headers["X-RateLimit-Remaining"] != None and response.headers["X-RateLimit-Remaining"] == 1:
-        thread = threading.Thread(target=doRateLimit, args=(response["headers"],))
-        thread.start()
+    thread = threading.Thread(target=doRateLimit, args=(response["headers"],))
+    thread.start()
     return 200
