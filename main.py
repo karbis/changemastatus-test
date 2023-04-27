@@ -5,15 +5,10 @@ from pydantic import BaseModel
 from better_profanity import profanity
 import os
 from fastapi.middleware.cors import CORSMiddleware
-from emoji import UNICODE_EMOJI
+import emoji
 
-def is_emoji(s):
-    count = 0
-    for emoji in UNICODE_EMOJI:
-        count += s.count(emoji)
-        if count > 1:
-            return False
-    return bool(count)
+def is_emoji(text):
+    return text in emoji.UNICODE_EMOJI['en']
 
 profanity.load_censor_words_from_file('swearlist.txt')
 
