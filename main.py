@@ -4,6 +4,7 @@ import json
 from pydantic import BaseModel
 from better_profanity import profanity
 import os
+from fastapi_cors import CORS
 
 def check_word(string):
     words = string.split()
@@ -19,6 +20,16 @@ def check_word(string):
 
 app = FastAPI()
 T = os.environ["token"]
+
+origins = ["*"]
+
+app.add_middleware(
+    CORS,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class Item(BaseModel):
     status: str
