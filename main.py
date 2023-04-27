@@ -151,15 +151,18 @@ def read_root():
     return {"Hello": "World"}
 
 rateLimit = False
+lastStatus = ""
 
 def doRateLimit(info):
     global rateLimit
     rateLimit = True
-    time.sleep(3)
+    time.sleep(4)
     rateLimit = False
 
 @app.post("/change/")
 def read_item(data: Item):
+    if lastStatus == data.status:
+        return 405
     if rateLimit:
         return 401
     if profanity.contains_profanity(replace_similar_chars(data.status)) or check_word(data.status)  or check_word2(data.status):
@@ -169,6 +172,7 @@ def read_item(data: Item):
     dicti = {"custom_status":{"text":data.status}}
     if data.emoji != None:
         dicti = {"custom_status":{"text":data.status,"emoji_name":data.emoji}}
+    lastStatus = data.status
     response = requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": T,"content-type": "application/json"}, data=json.dumps(dicti))
     thread = threading.Thread(target=doRateLimit, args=(response.headers,))
     thread.start()
