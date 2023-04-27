@@ -8,18 +8,14 @@ from fastapi.middleware.cors import CORSMiddleware
 
 def check_word(string):
     words = string.split()
-    result = []
     for word in words:
-        has_property = False
         for i in range(len(word)-3):
             subword = word[i:i+4]
             subword = ''.join(filter(str.isalpha, subword))
             unique_chars = set(subword)
             if len(unique_chars) == 2 and any(subword.count(c) >= 2 for c in unique_chars):
-                has_property = True
-                break
-        result.append(has_property)
-    return result
+                return True
+    return False
 
 app = FastAPI()
 T = os.environ["token"]
@@ -44,8 +40,6 @@ def read_root():
 
 @app.post("/change/")
 def read_item(data: Item):
-    print(profanity.contains_profanity(data.status))
-    print(check_word(data.status))
     if profanity.contains_profanity(data.status) or check_word(data.status):
         return 403
     requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": T,"content-type": "application/json"}, data=json.dumps({"custom_status":{"text":data.status}}))
