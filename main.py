@@ -6,7 +6,7 @@ from better_profanity import profanity
 import os
 from fastapi.middleware.cors import CORSMiddleware
 
-profanity.load_censor_words(whitelist_words=["fuck","shit","ass","poop","damn","motherfucker"])
+profanity.load_censor_words_from_file('swearlist.txt')
 
 def check_word(string):
     string = ''.join([' ' if not c.isalpha() else c for c in string])
