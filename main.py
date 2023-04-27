@@ -161,6 +161,7 @@ def doRateLimit(info):
 
 @app.post("/change/")
 def read_item(data: Item):
+    global lastStatus
     if lastStatus == data.status:
         return 405
     if rateLimit:
