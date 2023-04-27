@@ -6,12 +6,14 @@ from better_profanity import profanity
 import os
 from fastapi.middleware.cors import CORSMiddleware
 
+profanity.load_censor_words(whitelist_words=["fuck","shit","ass","poop","damn","motherfucker"])
+
 def check_word(string):
+    string = ''.join([' ' if not c.isalpha() else c for c in string])
     words = string.split()
     for word in words:
         for i in range(len(word)-3):
             subword = word[i:i+4]
-            subword = ''.join(filter(str.isalpha, subword))
             unique_chars = set(subword)
             if len(unique_chars) == 2 and any(subword.count(c) >= 2 for c in unique_chars):
                 return True
