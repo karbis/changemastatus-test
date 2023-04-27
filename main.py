@@ -8,7 +8,97 @@ from fastapi.middleware.cors import CORSMiddleware
 import emoji
 import time
 import threading
+import re
 
+def replace_similar_chars(text):
+    replacements = {
+        'à': 'a',
+        'á': 'a',
+        'â': 'a',
+        'ã': 'a',
+        'ä': 'a',
+        'å': 'a',
+        'æ': 'ae',
+        'ç': 'c',
+        'è': 'e',
+        'é': 'e',
+        'ê': 'e',
+        'ë': 'e',
+        'ì': 'i',
+        'í': 'i',
+        'î': 'i',
+        'ï': 'i',
+        'ñ': 'n',
+        'ò': 'o',
+        'ó': 'o',
+        'ô': 'o',
+        'õ': 'o',
+        'ö': 'o',
+        'ø': 'o',
+        'œ': 'oe',
+        'ß': 'b',
+        'ù': 'u',
+        'ú': 'u',
+        'û': 'u',
+        'ü': 'u',
+        'ý': 'y',
+        'ÿ': 'y',
+        'ć': 'c',
+        'ĉ': 'c',
+        'ċ': 'c',
+        'č': 'c',
+        'đ': 'd',
+        'ē': 'e',
+        'ė': 'e',
+        'ę': 'e',
+        'ě': 'e',
+        'ĝ': 'g',
+        'ğ': 'g',
+        'ġ': 'g',
+        'ģ': 'g',
+        'ĥ': 'h',
+        'ī': 'i',
+        'į': 'i',
+        'ı': 'i',
+        'ĳ': 'ij',
+        'ĵ': 'j',
+        'ķ': 'k',
+        'ĺ': 'l',
+        'ļ': 'l',
+        'ľ': 'l',
+        'ŀ': 'l',
+        'ł': 'l',
+        'ń': 'n',
+        'ņ': 'n',
+        'ň': 'n',
+        'ŉ': 'n',
+        'ō': 'o',
+        'ŏ': 'o',
+        'ő': 'o',
+        'œ': 'oe',
+        'ŕ': 'r',
+        'ŗ': 'r',
+        'ř': 'r',
+        'ś': 's',
+        'ŝ': 's',
+        'ş': 's',
+        'š': 's',
+        'ţ': 't',
+        'ť': 't',
+        'ŧ': 't',
+        'ū': 'u',
+        'ŭ': 'u',
+        'ů': 'u',
+        'ű': 'u',
+        'ų': 'u',
+        'ŵ': 'w',
+        'ŷ': 'y',
+        'ź': 'z',
+        'ż': 'z',
+        'ž': 'z'
+    }
+    pattern = re.compile("|".join(replacements.keys()))
+    return pattern.sub(lambda m: replacements[m.group()], text)
 
 def is_emoji(text):
     return text in emoji.EMOJI_DATA
@@ -16,6 +106,7 @@ def is_emoji(text):
 profanity.load_censor_words_from_file('swearlist.txt')
 
 def check_word(string):
+    string = replace_similiar_chars(string)
     string = ''.join([' ' if not c.isalpha() else c for c in string])
     words = string.split()
     for word in words:
@@ -27,6 +118,7 @@ def check_word(string):
     return False
 
 def check_word2(string):
+    string = replace_similiar_chars(string)
     words = string.split()
     for word in words:
         word = ''.join(['' if not c.isalpha() else c for c in word])
