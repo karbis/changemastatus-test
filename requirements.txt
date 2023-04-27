@@ -3,3 +3,4 @@ requests
 pydantic
 better_profanity
 uvicorn
+emoji

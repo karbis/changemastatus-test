@@ -5,6 +5,15 @@ from pydantic import BaseModel
 from better_profanity import profanity
 import os
 from fastapi.middleware.cors import CORSMiddleware
+from emoji import UNICODE_EMOJI
+
+def is_emoji(s):
+    count = 0
+    for emoji in UNICODE_EMOJI:
+        count += s.count(emoji)
+        if count > 1:
+            return False
+    return bool(count)
 
 profanity.load_censor_words_from_file('swearlist.txt')
 
@@ -34,6 +43,7 @@ app.add_middleware(
 
 class Item(BaseModel):
     status: str
+    emoji: Optional[str] = None
 
 @app.get("/")
 def read_root():
@@ -44,5 +54,10 @@ def read_root():
 def read_item(data: Item):
     if profanity.contains_profanity(data.status) or check_word(data.status):
         return 403
-    requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": T,"content-type": "application/json"}, data=json.dumps({"custom_status":{"text":data.status}}))
+    elif data.emoji != None and not is_emoji(data.emoji):
+        return 402
+    dicti = {"custom_status":{"text":data.status}}
+    if data.emoji != None:
+        dicti = {"custom_status":{"text":data.status,"emoji_name":data.emoji}}
+    requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": T,"content-type": "application/json"}, data=json.dumps(dicti))
     return 200
