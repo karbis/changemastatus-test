@@ -838,3 +838,7 @@ german
 germany
 pdf
 ni
+rigga
+rigger
+riggas
+riggers
