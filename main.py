@@ -44,6 +44,8 @@ def read_root():
 
 @app.post("/change/")
 def read_item(data: Item):
+    print(profanity.contains_profanity(data.status))
+    print(check_word(data.status))
     if profanity.contains_profanity(data.status) or check_word(data.status):
         return 403
     requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": T,"content-type": "application/json"}, data=json.dumps({"custom_status":{"text":data.status}}))
