@@ -27,9 +27,9 @@ def check_word(string):
     return False
 
 def check_word2(string):
-    string = ''.join(['' if not c.isalpha() else c for c in string])
     words = string.split()
     for word in words:
+        word = ''.join(['' if not c.isalpha() else c for c in word])
         for i in range(len(word)-3):
             subword = word[i:i+4]
             unique_chars = set(subword)
