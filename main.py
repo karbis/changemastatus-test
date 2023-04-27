@@ -161,6 +161,8 @@ def doRateLimit(info):
 
 @app.post("/change/")
 def read_item(data: Item):
+    if os.environ["halt"] == "1":
+        return 406
     global lastStatus
     if lastStatus == data.status:
         return 405
