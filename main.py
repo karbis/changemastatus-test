@@ -10,10 +10,13 @@ def check_word(string):
     words = string.split()
     result = []
     for word in words:
-        has_property = True
-        for i in range(0, len(word)-3, 4):
-            if len(set(word[i:i+4])) != 2:
-                has_property = False
+        has_property = False
+        for i in range(len(word)-3):
+            subword = word[i:i+4]
+            subword = ''.join(filter(str.isalpha, subword))
+            unique_chars = set(subword)
+            if len(unique_chars) == 2 and any(subword.count(c) >= 2 for c in unique_chars):
+                has_property = True
                 break
         result.append(has_property)
     return result
