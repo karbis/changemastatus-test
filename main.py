@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import emoji
 
 def is_emoji(text):
-    return text in emoji.UNICODE_EMOJI['en']
+    return text in emoji.EMOJI_DATA
 
 profanity.load_censor_words_from_file('swearlist.txt')
 
