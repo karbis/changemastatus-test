@@ -26,6 +26,17 @@ def check_word(string):
                 return True
     return False
 
+def check_word2(string):
+    string = ''.join(['' if not c.isalpha() else c for c in string])
+    words = string.split()
+    for word in words:
+        for i in range(len(word)-3):
+            subword = word[i:i+4]
+            unique_chars = set(subword)
+            if len(unique_chars) == 2 and any(subword.count(c) >= 2 for c in unique_chars):
+                return True
+    return False
+
 app = FastAPI()
 T = os.environ["token"]
 
@@ -59,7 +70,7 @@ def doRateLimit(info):
 def read_item(data: Item):
     if rateLimit:
         return 401
-    if profanity.contains_profanity(data.status) or check_word(data.status):
+    if profanity.contains_profanity(data.status) or check_word(data.status)  or check_word2(data.status):
         return 403
     elif data.emoji != None and not is_emoji(data.emoji):
         return 402
