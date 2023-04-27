@@ -3,4 +3,3 @@ requests
 pydantic
 better_profanity
 uvicorn
-fastapi-cors

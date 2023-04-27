@@ -4,7 +4,7 @@ import json
 from pydantic import BaseModel
 from better_profanity import profanity
 import os
-from fastapi_cors import CORS
+from fastapi.middleware.cors import CORSMiddleware
 
 def check_word(string):
     words = string.split()
@@ -24,7 +24,7 @@ T = os.environ["token"]
 origins = ["*"]
 
 app.add_middleware(
-    CORS,
+    CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
