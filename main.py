@@ -38,7 +38,7 @@ app.add_middleware(
 
 class Item(BaseModel):
     status: str
-    emoji: Optional[str] = None
+    emoji: str | None = None
 
 @app.get("/")
 def read_root():
