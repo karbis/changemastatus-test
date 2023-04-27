@@ -6,6 +6,9 @@ from better_profanity import profanity
 import os
 from fastapi.middleware.cors import CORSMiddleware
 import emoji
+import time
+from threading import Thread
+
 
 def is_emoji(text):
     return text in emoji.EMOJI_DATA
@@ -44,9 +47,18 @@ class Item(BaseModel):
 def read_root():
     return {"Hello": "World"}
 
+rateLimit = False
+
+def doRateLimit(info):
+    global rateLimit
+    rateLimit = True
+    time.sleep(time.time()-int(info["X-RateLimit-Reset"]))
+    rateLimit = False
 
 @app.post("/change/")
 def read_item(data: Item):
+    if rateLimit:
+        return 401
     if profanity.contains_profanity(data.status) or check_word(data.status):
         return 403
     elif data.emoji != None and not is_emoji(data.emoji):
@@ -54,5 +66,9 @@ def read_item(data: Item):
     dicti = {"custom_status":{"text":data.status}}
     if data.emoji != None:
         dicti = {"custom_status":{"text":data.status,"emoji_name":data.emoji}}
-    requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": T,"content-type": "application/json"}, data=json.dumps(dicti))
+    response = requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": T,"content-type": "application/json"}, data=json.dumps(dicti))
+    if response.headers["X-RateLimit-Remaining"] and response.headers["X-RateLimit-Remaining"] == 1 {
+        t = Thread(target=doRateLimit,args=(response.headers,))
+        t.start()
+    }
     return 200
