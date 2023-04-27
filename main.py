@@ -7,7 +7,7 @@ import os
 from fastapi.middleware.cors import CORSMiddleware
 import emoji
 import time
-from threading import Thread
+import threading
 
 
 def is_emoji(text):
@@ -68,7 +68,7 @@ def read_item(data: Item):
         dicti = {"custom_status":{"text":data.status,"emoji_name":data.emoji}}
     response = requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": T,"content-type": "application/json"}, data=json.dumps(dicti))
     if response.headers["X-RateLimit-Remaining"] and response.headers["X-RateLimit-Remaining"] == 1 {
-        thread = threading.Thread(target=doRateLimit,args=(response.headers,))
+        thread = threading.Thread(target=doRateLimit, args=(response.headers,))
         thread.start()
     }
     return 200
