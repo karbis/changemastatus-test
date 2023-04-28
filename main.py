@@ -103,15 +103,11 @@ def replace_similar_chars(text):
 def is_emoji(text):
     return text in emoji.EMOJI_DATA
 
-def test(request: Request):
+def getIp(request: Request):
     x = 'x-forwarded-for'.encode('utf-8')
     for header in request.headers.raw:
         if header[0] == x:
-            print(header[1].decode("utf-8"))
-            print("Find out the forwarded-for ip address")
-            origin_ip, forward_ip = re.split(', ', header[1].decode('utf-8'))
-            print(f"origin_ip:\t{origin_ip}")
-            print(f"forward_ip:\t{forward_ip}")
+            return re.split(", ",header[1].decode("utf-8"))[0]
 
 profanity.load_censor_words_from_file('swearlist.txt')
 
@@ -171,7 +167,7 @@ def doRateLimit(info):
 
 @app.post("/change/")
 def read_item(data: Item, request: Request):
-    print(test(request))
+    print(getIp(request))
     global lastStatus
     if lastStatus == data.status:
         return 405
