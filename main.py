@@ -162,7 +162,7 @@ lastStatus = ""
 def doRateLimit(info):
     global rateLimit
     rateLimit = True
-    time.sleep(4)
+    time.sleep(3.5)
     rateLimit = False
 
 blacklistedIps = re.split(",",os.environ["blacklist"])
