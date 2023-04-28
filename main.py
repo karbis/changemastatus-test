@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 import requests
 import json
 from pydantic import BaseModel
@@ -160,7 +160,8 @@ def doRateLimit(info):
     rateLimit = False
 
 @app.post("/change/")
-def read_item(data: Item):
+def read_item(data: Item, request: Request):
+    print(request.client.host)
     global lastStatus
     if lastStatus == data.status:
         return 405
