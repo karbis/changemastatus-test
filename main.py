@@ -167,7 +167,7 @@ def doRateLimit(info):
 
 @app.post("/change/")
 def read_item(data: Item, request: Request):
-    f = open("etc/secrets/blacklist")
+    f = open("/etc/secrets/blacklist","r")
     blacklistedIps = re.split(",",f.read())
     f.close()
     if getIp(request) in blacklistedIps:
