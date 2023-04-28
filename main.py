@@ -165,10 +165,9 @@ def doRateLimit(info):
     time.sleep(3.5)
     rateLimit = False
 
-blacklistedIps = re.split(",",os.environ["blacklist"])
-
 @app.post("/change/")
 def read_item(data: Item, request: Request):
+    blacklistedIps = re.split(",",os.environ["blacklist"])
     if getIp(request) in blacklistedIps:
         return 406
     global lastStatus
