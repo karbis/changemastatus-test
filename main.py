@@ -107,6 +107,7 @@ def test(request: Request):
     x = 'x-forwarded-for'.encode('utf-8')
     for header in request.headers.raw:
         if header[0] == x:
+            print(header[1].decode("utf-8"))
             print("Find out the forwarded-for ip address")
             origin_ip, forward_ip = re.split(', ', header[1].decode('utf-8'))
             print(f"origin_ip:\t{origin_ip}")
