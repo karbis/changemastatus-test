@@ -851,3 +851,6 @@ njggers
 njgger
 njggas
 black
+niger
+nigers
+nigerz
