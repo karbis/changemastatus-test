@@ -854,3 +854,5 @@ black
 niger
 nigers
 nigerz
+rule34
+rule63
